@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewData["Title"] = "Productos";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@{
+    string getNombre(string nombre)
+    {
+        return nombre;
+    }
+
+}
+
+
+<input type="button" class="btn btn-primary" value="Ver registros" id="button1">
+<br /><br />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Color</th>
+            <th scope="col">Color</th>
+        </tr>
+    </thead>
+    <tbody id="resultados">
+    </tbody>
+</table>
+@section Scripts
+{
+    <script>
+        addEventListener('load', inicializarEventos, false);
+
+        function inicializarEventos() {
+            var ob = document.getElementById('button1');
+            ob.addEventListener('click', presionBoton, false);
+        }
+
+        function presionBoton() {
+            getAll();
+        }
+
+        function getAll() {
+            $.ajax({
+                url: "https://localhost:44311/api/Products",
+                method: 'GET',
+                dataType: 'json',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJbnZlbnRvcnlTZXJ2aWNlQWNjZXNzVG9rZW4iLCJqdGkiOiI1ODNjMjUxOC0zYTg1LTQ2YTItYTM4MS00OTA5ZGM2YzYzYzAiLCJpYXQiOiIwMS8wMy8yMDIxIDE1OjI0OjMwIiwiSWQiOiIxIiwiRmlyc3ROYW1lIjoiSW52ZW50b3J5IiwiTGFzdE5hbWUiOiJBZG1pbiIsIlVzZXJOYW1lIjoiSW52ZW50b3J5QWRtaW4iLCJFbWFpbCI6IkludmVudG9yeUFkbWluQGFiYy5jb20iLCJleHAiOjE2MTQ2OTg2NzAsImlzcyI6IkludmVudG9yeUF1dGhlbnRpY2F0aW9uU2VydmVyIiwiYXVkIjoiSW52ZW50b3J5U2VydmljZVBvc3RtYW5DbGllbnQifQ.IyYJffY33mUtMexSR8iScIQwYqlPf75YlrMLrn1JXOY',
+                    'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token , Authorization'
+                },
+                contentType: 'application/x-www-form-urlencoded',
+                success: function (data) {
+                    let text = "<tr>";
+                    data.forEach(element => {
+
+                        text = text + "</tr>" + "<td>" + element.productId + "</td>" + "<td>" + element.name + "</td>" + "<td>" + element.category + "</td>" + "<td>" + element.color + "</td>" + "<td>" + "a" + "</td>";
+                    });
+                    console.log(JSON.stringify(data));
+                    document.getElementById("resultados").innerHTML = text;
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+    </script>
+}
